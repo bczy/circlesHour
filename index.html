@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Defend</title>
+    <meta charset="utf-8">
+    <style type="text/css"> body{ background-color: #FFF; margin: 0px; overflow: hidden; } .information{ width: 800px; }</style>
+    <link href='http://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'>
+  </head>
+  <body style='background:#CCC' style="">
+    <div id="canvasContainer" style="width:100%;margin-left:auto;text-align:center;font-family: 'Orbitron', cursive; font-size:32px;color:#000">
+    <div style="margin:10px auto 0px auto;" ><canvas id="canvas"></canvas></div>
+    </div>
+  <script>
+    window.requestAnimFrame = ( 
+      function(){
+	return  window.requestAnimationFrame || 
+	window.webkitRequestAnimationFrame || 
+	window.mozRequestAnimationFrame    || 
+	window.oRequestAnimationFrame      || 
+	window.msRequestAnimationFrame     || 
+	function(callback, element){
+	  window.setTimeout(callback, 1000 / 60);
+	};
+      }
+    )();
+    var box=0;
+    var canvas = document.getElementById('canvas');
+    var ctx = document.getElementById('canvas').getContext('2d');
+    function circleDots(point){
+      for (var i=0 ; i < 350 ; i+=6){
+	ctx.fillRect((Math.cos(point)*i)+canvas.width/2,(Math.sin(point)*i)+canvas.height/2,2,2);
+      }
+    }
+    function makeCircle(x,y){
+      for (var i=0;i<32;i+=8){
+	  ctx.beginPath();
+	  ctx.arc(x,y,i*12*Math.abs(Math.cos(box/32)),0,Math.PI*2,false); 
+	  ctx.stroke();
+      }
+    }
+    function run(){
+      ctx.fillStyle = "rgba(0,0,0,0.1)";
+      ctx.lineWidth = 7;
+      ctx.globalCompositeOperation = "source-over";
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      //ctx.globalCompositeOperation = "lighter";
+      if (box > 100){
+	ctx.fillStyle = "rgba(255,255,255,0.8)";
+	for (var i=0;i<4;++i){
+	  circleDots(i*box);
+	  
+	}
+      }
+      else{
+	ctx.fillStyle = "rgba(255,0,0,0.8)";
+	ctx.strokeStyle = "rgba(0,255,255,0.8)";
+	makeCircle(canvas.width/2+Math.cos(box)*90,canvas.height/2+Math.cos(box)*90);
+	makeCircle(canvas.width/2-Math.cos(box)*90,canvas.height/2-Math.cos(box)*90);
+	makeCircle(canvas.width/2+Math.cos(box)*90,canvas.height/2-Math.cos(box)*90);
+	makeCircle(canvas.width/2-Math.cos(box)*90,canvas.height/2+Math.cos(box)*90);
+	ctx.strokeStyle = "rgba(186,85,211,0.8)";
+	makeCircle(canvas.width/2+Math.sin(box)*90,canvas.height/2+Math.sin(box)*90);
+	makeCircle(canvas.width/2-Math.sin(box)*90,canvas.height/2-Math.sin(box)*90);
+	makeCircle(canvas.width/2+Math.sin(box)*90,canvas.height/2-Math.sin(box)*90);
+	makeCircle(canvas.width/2-Math.sin(box)*90,canvas.height/2+Math.sin(box)*90);
+	
+      }
+      box+=0.04;
+      requestAnimFrame(run);
+    }
+    function dotLines(){
+      for (var i=0;i<360;i+=60){
+	  ctx.beginPath();
+	  ctx.arc(Math.floor(Math.sin(box/8)*i),canvas.height/2-12 - Math.cos(box/8)*i,5,0,Math.PI*2,true);
+	  ctx.stroke();
+	  ctx.beginPath();
+	  ctx.arc(Math.floor(Math.sin(box/8)*i),canvas.height/2,5,0,Math.PI*2,true);
+	  ctx.stroke();
+	  ctx.beginPath();
+	  ctx.arc(Math.floor(Math.sin(box/8)*i),canvas.height/2+12+ Math.cos(box/8)*i,5,0,Math.PI*2,true);
+	  ctx.stroke();
+	  ctx.beginPath();
+	  ctx.arc(Math.floor(canvas.width-Math.sin(box/8)*i),canvas.height/2-12- Math.cos(box/8)*i,5,0,Math.PI*2,true);
+	  ctx.stroke();
+	  ctx.beginPath();
+	  ctx.arc(Math.floor(canvas.width-Math.sin(box/8)*i),canvas.height/2,5,0,Math.PI*2,true);
+	  ctx.stroke();
+	  ctx.beginPath();
+	  ctx.arc(Math.floor(canvas.width-Math.sin(box/8)*i),canvas.height/2+12+ Math.cos(box/8)*i,5,0,Math.PI*2,true);
+	  ctx.stroke();
+	}
+    }
+    function init() {
+      ctx.strokeStyle = "rgba(255,255,255,0.8)";
+      ctx.fillStyle = "rgba(0,0,0)";
+      ctx.globalCompositeOperation = "lighter";
+      ctx.canvas.width  = window.innerWidth;
+      ctx.canvas.height = window.innerHeight;
+    }
+    init();
+    run();
+  </script>
+</body>
+</html>
+     
